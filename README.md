@@ -1,7 +1,7 @@
 # Backend Task Project
 
 ## Setup
-1. Clone repository: `git clone https://github.com/yourusername/backend_task.git`
+1. Clone repository: `git clone https://github.com/THEBLANK490/backend_task.git`
 2. Create `.env` file with environment variables
 3. Build containers: `docker-compose up -d --build`
 4. Apply migrations: `docker-compose exec django python manage.py migrate`
