@@ -1,0 +1,7 @@
+env/
+.env
+__pycache__/
+envs/db.env
+envs/elasticsearch.env
+envs/kibana.env
+celerybeat-schedule*

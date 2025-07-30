@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.django
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  celery:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.celery
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile.beat
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  db:
+    image: postgis/postgis:14-3.3
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - envs/db.env
+    restart: unless-stopped
+
+  redis:
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    env_file:
+      - envs/elasticsearch.env
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    env_file:
+      - envs/kibana.env
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  es_data:
