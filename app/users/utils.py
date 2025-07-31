@@ -68,8 +68,5 @@ def fetch_and_index_hydrology_data():
     ]
 
     helpers.bulk(es, actions)
-    # for station in stations:
-    #     station_id = station.get("station_no")
-    #     es.index(index="hydrology-stations", id=station_id, body=station)
 
     logger.info(f"Index Created {len(stations)}")
